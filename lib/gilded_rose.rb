@@ -2,6 +2,10 @@ class ItemDecorator < SimpleDelegator
   def decrement_quality
     self.quality -= 1
   end
+
+  def increment_quality
+    self.quality += 1
+  end
 end
 
 def update_quality(items)
@@ -16,16 +20,17 @@ def update_quality(items)
       end
     else
       if item.quality < 50
-        item.quality += 1
+        item.increment_quality
+
         if item.name == 'Backstage passes to a TAFKAL80ETC concert'
           if item.sell_in < 11
             if item.quality < 50
-              item.quality += 1
+              item.increment_quality
             end
           end
           if item.sell_in < 6
             if item.quality < 50
-              item.quality += 1
+              item.increment_quality
             end
           end
         end
@@ -47,7 +52,7 @@ def update_quality(items)
         end
       else
         if item.quality < 50
-          item.quality += 1
+          item.increment_quality
         end
       end
     end
