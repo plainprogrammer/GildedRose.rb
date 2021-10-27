@@ -10,6 +10,10 @@ class ItemDecorator < SimpleDelegator
   def decrement_sell_in
     self.sell_in -= 1
   end
+
+  def zero_out_quality
+    self.quality = 0
+  end
 end
 
 def update_quality(items)
@@ -52,7 +56,7 @@ def update_quality(items)
             end
           end
         else
-          item.quality = item.quality - item.quality
+          item.zero_out_quality
         end
       else
         if item.quality < 50
