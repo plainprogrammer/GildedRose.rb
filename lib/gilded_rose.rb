@@ -1,4 +1,8 @@
-class ItemDecorator < SimpleDelegator; end
+class ItemDecorator < SimpleDelegator
+  def decrement_quality
+    self.quality -= 1
+  end
+end
 
 def update_quality(items)
   items.each do |item|
@@ -7,7 +11,7 @@ def update_quality(items)
     if item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert'
       if item.quality > 0
         if item.name != 'Sulfuras, Hand of Ragnaros'
-          item.quality -= 1
+          item.decrement_quality
         end
       end
     else
@@ -35,7 +39,7 @@ def update_quality(items)
         if item.name != 'Backstage passes to a TAFKAL80ETC concert'
           if item.quality > 0
             if item.name != 'Sulfuras, Hand of Ragnaros'
-              item.quality -= 1
+              item.decrement_quality
             end
           end
         else
