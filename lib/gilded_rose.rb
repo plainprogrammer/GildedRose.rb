@@ -6,6 +6,10 @@ class ItemDecorator < SimpleDelegator
   def increment_quality
     self.quality += 1
   end
+
+  def decrement_sell_in
+    self.sell_in -= 1
+  end
 end
 
 def update_quality(items)
@@ -37,7 +41,7 @@ def update_quality(items)
       end
     end
     if item.name != 'Sulfuras, Hand of Ragnaros'
-      item.sell_in -= 1
+      item.decrement_sell_in
     end
     if item.sell_in < 0
       if item.name != "Aged Brie"
