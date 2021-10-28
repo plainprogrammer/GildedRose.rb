@@ -1,13 +1,8 @@
 class ItemDecorator < SimpleDelegator
   def update
-    case self.name
-    when 'NORMAL ITEM'
-      decrement_quality
-      decrement_sell_in
-      decrement_quality if self.sell_in < 0
-    else # Legendary Items
-      # No-Op
-    end
+    decrement_quality
+    decrement_sell_in
+    decrement_quality if self.sell_in < 0
   end
 
   private
@@ -51,6 +46,10 @@ class BackstagePass < ItemDecorator
   end
 end
 
+class LegendaryItem < ItemDecorator
+  def update; end # No-Op
+end
+
 def update_quality(items)
   items.each do |item|
     case item.name
@@ -58,6 +57,8 @@ def update_quality(items)
       AgedBrie.new(item).update
     when 'Backstage passes to a TAFKAL80ETC concert'
       BackstagePass.new(item).update
+    when 'Sulfuras, Hand of Ragnaros'
+      LegendaryItem.new(item).update
     else
       ItemDecorator.new(item).update
     end
