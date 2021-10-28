@@ -55,9 +55,12 @@ ITEM_TYPE_MAP = {
   'Conjured Mana Cake': :conjured
 }
 
+def lookup_item_type(item)
+  ITEM_TYPE_MAP[item.name.to_sym] || :normal
+end
+
 def update(item)
-  item_type = ITEM_TYPE_MAP[item.name.to_sym] || :normal
-  UPDATERS[item_type].call(item)
+  UPDATERS[lookup_item_type(item)].call(item)
 end
 
 def update_quality(items)
