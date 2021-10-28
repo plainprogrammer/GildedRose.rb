@@ -7,6 +7,8 @@ class ItemDecorator < SimpleDelegator
       BackstagePass.new(item)
     when 'Sulfuras, Hand of Ragnaros'
       LegendaryItem.new(item)
+    when 'Conjured Mana Cake'
+      ConjuredItem.new(item)
     else
       ItemDecorator.new(item)
     end
@@ -57,6 +59,16 @@ end
 
 class LegendaryItem < ItemDecorator
   def update; end # No-Op
+end
+
+class ConjuredItem < ItemDecorator
+  def update
+    decrement_quality
+    decrement_quality
+    decrement_sell_in
+    decrement_quality if self.sell_in < 0
+    decrement_quality if self.sell_in < 0
+  end
 end
 
 def update_quality(items)
