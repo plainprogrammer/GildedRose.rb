@@ -24,6 +24,8 @@ class ItemDecorator < SimpleDelegator
     end
   end
 
+  private
+
   def decrement_quality
     self.quality -= 1 if self.quality > 0
   end
