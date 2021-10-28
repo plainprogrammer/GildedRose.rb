@@ -35,12 +35,8 @@ end
 class BackstagePass < ItemDecorator
   def update
     increment_quality
-    if self.sell_in < 11
-      increment_quality
-    end
-    if self.sell_in < 6
-      increment_quality
-    end
+    increment_quality if self.sell_in < 11
+    increment_quality if self.sell_in < 6
     decrement_sell_in
     zero_out_quality if self.sell_in < 0
   end
