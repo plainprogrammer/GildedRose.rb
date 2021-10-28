@@ -5,16 +5,6 @@ class ItemDecorator < SimpleDelegator
       decrement_quality
       decrement_sell_in
       decrement_quality if self.sell_in < 0
-    when 'Backstage passes to a TAFKAL80ETC concert'
-      increment_quality
-      if self.sell_in < 11
-        increment_quality
-      end
-      if self.sell_in < 6
-        increment_quality
-      end
-      decrement_sell_in
-      zero_out_quality if self.sell_in < 0
     else # Legendary Items
       # No-Op
     end
@@ -47,11 +37,27 @@ class AgedBrie < ItemDecorator
   end
 end
 
+class BackstagePass < ItemDecorator
+  def update
+    increment_quality
+    if self.sell_in < 11
+      increment_quality
+    end
+    if self.sell_in < 6
+      increment_quality
+    end
+    decrement_sell_in
+    zero_out_quality if self.sell_in < 0
+  end
+end
+
 def update_quality(items)
   items.each do |item|
     case item.name
     when 'Aged Brie'
       AgedBrie.new(item).update
+    when 'Backstage passes to a TAFKAL80ETC concert'
+      BackstagePass.new(item).update
     else
       ItemDecorator.new(item).update
     end
