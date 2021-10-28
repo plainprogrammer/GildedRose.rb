@@ -23,8 +23,12 @@ def update_quality(items)
     case item.name
     when 'NORMAL ITEM'
       item.decrement_quality
+      item.decrement_sell_in
+      item.decrement_quality if item.sell_in < 0
     when 'Aged Brie'
       item.increment_quality
+      item.decrement_sell_in
+      item.increment_quality if item.sell_in < 0
     when 'Backstage passes to a TAFKAL80ETC concert'
       item.increment_quality
       if item.sell_in < 11
@@ -33,23 +37,10 @@ def update_quality(items)
       if item.sell_in < 6
         item.increment_quality
       end
-    end
-
-    if item.name != 'Sulfuras, Hand of Ragnaros'
       item.decrement_sell_in
-    end
-
-    if item.sell_in < 0
-      case item.name
-      when "Aged Brie"
-        item.increment_quality
-      when 'Backstage passes to a TAFKAL80ETC concert'
-        item.zero_out_quality
-      when 'Sulfuras, Hand of Ragnaros'
-        # No-Op
-      else
-        item.decrement_quality
-      end
+      item.zero_out_quality if item.sell_in < 0
+    else # Legendary Items
+      # No-Op
     end
   end
 end
