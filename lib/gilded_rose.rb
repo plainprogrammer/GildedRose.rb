@@ -15,6 +15,7 @@ def update_quality(items)
     when 'Aged Brie'
       adjust_quality(item, 1)
       decrement_sell_in(item)
+      adjust_quality(item, 1) if item.sell_in < 0
     when 'Backstage passes to a TAFKAL80ETC concert'
       adjust_quality(item, 1)
       if item.sell_in < 11
@@ -24,25 +25,13 @@ def update_quality(items)
         adjust_quality(item, 1)
       end
       decrement_sell_in(item)
+      adjust_quality(item, -item.quality) if item.sell_in < 0
     when 'Sulfuras, Hand of Ragnaros'
       # No-Op
     else
       adjust_quality(item, -1)
       decrement_sell_in(item)
-    end
-
-    if item.sell_in < 0
-      if item.name != "Aged Brie"
-        if item.name != 'Backstage passes to a TAFKAL80ETC concert'
-          if item.name != 'Sulfuras, Hand of Ragnaros'
-            adjust_quality(item, -1)
-          end
-        else
-          adjust_quality(item, -item.quality)
-        end
-      else
-        adjust_quality(item, 1)
-      end
+      adjust_quality(item, -1) if item.sell_in < 0
     end
   end
 end
