@@ -1,4 +1,29 @@
 class ItemDecorator < SimpleDelegator
+  def update
+    case self.name
+    when 'NORMAL ITEM'
+      decrement_quality
+      decrement_sell_in
+      decrement_quality if self.sell_in < 0
+    when 'Aged Brie'
+      increment_quality
+      decrement_sell_in
+      increment_quality if self.sell_in < 0
+    when 'Backstage passes to a TAFKAL80ETC concert'
+      increment_quality
+      if self.sell_in < 11
+        increment_quality
+      end
+      if self.sell_in < 6
+        increment_quality
+      end
+      decrement_sell_in
+      zero_out_quality if self.sell_in < 0
+    else # Legendary Items
+      # No-Op
+    end
+  end
+
   def decrement_quality
     self.quality -= 1 if self.quality > 0
   end
@@ -18,30 +43,7 @@ end
 
 def update_quality(items)
   items.each do |item|
-    item = ItemDecorator.new(item)
-
-    case item.name
-    when 'NORMAL ITEM'
-      item.decrement_quality
-      item.decrement_sell_in
-      item.decrement_quality if item.sell_in < 0
-    when 'Aged Brie'
-      item.increment_quality
-      item.decrement_sell_in
-      item.increment_quality if item.sell_in < 0
-    when 'Backstage passes to a TAFKAL80ETC concert'
-      item.increment_quality
-      if item.sell_in < 11
-        item.increment_quality
-      end
-      if item.sell_in < 6
-        item.increment_quality
-      end
-      item.decrement_sell_in
-      item.zero_out_quality if item.sell_in < 0
-    else # Legendary Items
-      # No-Op
-    end
+    ItemDecorator.new(item).update
   end
 end
 
