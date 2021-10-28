@@ -33,20 +33,22 @@ UPDATERS = {
     else
       adjust_quality(item, 1)
     end
-  }
+  },
+  legendary: Proc.new {|_item|}
 }
 
 def update(item)
-  return if item.name == 'Sulfuras, Hand of Ragnaros'
-
-  decrement_sell_in(item)
-
   updater = case item.name
+  when 'Sulfuras, Hand of Ragnaros'
+    UPDATERS[:legendary]
   when 'Aged Brie'
+    decrement_sell_in(item)
     UPDATERS[:aged_brie]
   when 'Backstage passes to a TAFKAL80ETC concert'
+    decrement_sell_in(item)
     UPDATERS[:backstage_pass]
   else # Normal Item
+    decrement_sell_in(item)
     UPDATERS[:normal]
   end
 
