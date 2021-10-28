@@ -20,36 +20,35 @@ def update_quality(items)
   items.each do |item|
     item = ItemDecorator.new(item)
 
-    if item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert'
-      if item.name != 'Sulfuras, Hand of Ragnaros'
-        item.decrement_quality
-      end
-    else
+    case item.name
+    when 'NORMAL ITEM'
+      item.decrement_quality
+    when 'Aged Brie'
       item.increment_quality
-
-      if item.name == 'Backstage passes to a TAFKAL80ETC concert'
-        if item.sell_in < 11
-          item.increment_quality
-        end
-        if item.sell_in < 6
-          item.increment_quality
-        end
+    when 'Backstage passes to a TAFKAL80ETC concert'
+      item.increment_quality
+      if item.sell_in < 11
+        item.increment_quality
+      end
+      if item.sell_in < 6
+        item.increment_quality
       end
     end
+
     if item.name != 'Sulfuras, Hand of Ragnaros'
       item.decrement_sell_in
     end
+
     if item.sell_in < 0
-      if item.name != "Aged Brie"
-        if item.name != 'Backstage passes to a TAFKAL80ETC concert'
-          if item.name != 'Sulfuras, Hand of Ragnaros'
-            item.decrement_quality
-          end
-        else
-          item.zero_out_quality
-        end
-      else
+      case item.name
+      when "Aged Brie"
         item.increment_quality
+      when 'Backstage passes to a TAFKAL80ETC concert'
+        item.zero_out_quality
+      when 'Sulfuras, Hand of Ragnaros'
+        # No-Op
+      else
+        item.decrement_quality
       end
     end
   end
