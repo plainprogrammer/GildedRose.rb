@@ -8,19 +8,15 @@ def decrement_sell_in(item)
   item.sell_in -= 1
 end
 
-def update(item)
-  return if item.name == 'Sulfuras, Hand of Ragnaros'
-
-  decrement_sell_in(item)
-
-  case item.name
-  when 'Aged Brie'
+UPDATERS = {
+  normal: Proc.new { |item|
     if item.sell_in < 0
-      adjust_quality(item, 2)
+      adjust_quality(item, -2)
     else
-      adjust_quality(item, 1)
+      adjust_quality(item, -1)
     end
-  when 'Backstage passes to a TAFKAL80ETC concert'
+  },
+  backstage_pass: Proc.new { |item|
     if item.sell_in < 0
       adjust_quality(item, -item.quality)
     elsif item.sell_in >= 10
@@ -30,12 +26,28 @@ def update(item)
     else
       adjust_quality(item, 3)
     end
-  else # Normal Item
+  },
+  aged_brie: Proc.new { |item|
     if item.sell_in < 0
-      adjust_quality(item, -2)
+      adjust_quality(item, 2)
     else
-      adjust_quality(item, -1)
+      adjust_quality(item, 1)
     end
+  }
+}
+
+def update(item)
+  return if item.name == 'Sulfuras, Hand of Ragnaros'
+
+  decrement_sell_in(item)
+
+  case item.name
+  when 'Aged Brie'
+    UPDATERS[:aged_brie].call(item)
+  when 'Backstage passes to a TAFKAL80ETC concert'
+    UPDATERS[:backstage_pass].call(item)
+  else # Normal Item
+    UPDATERS[:normal].call(item)
   end
 end
 
