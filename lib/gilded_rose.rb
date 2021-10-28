@@ -9,18 +9,18 @@ def decrement_sell_in(item)
 end
 
 def update(item)
+  return if item.name == 'Sulfuras, Hand of Ragnaros'
+
+  decrement_sell_in(item)
+
   case item.name
   when 'Aged Brie'
-    decrement_sell_in(item)
-
     if item.sell_in < 0
       adjust_quality(item, 2)
     else
       adjust_quality(item, 1)
     end
   when 'Backstage passes to a TAFKAL80ETC concert'
-    decrement_sell_in(item)
-
     if item.sell_in < 0
       adjust_quality(item, -item.quality)
     elsif item.sell_in >= 10
@@ -30,11 +30,7 @@ def update(item)
     else
       adjust_quality(item, 3)
     end
-  when 'Sulfuras, Hand of Ragnaros'
-    # No-Op
   else # Normal Item
-    decrement_sell_in(item)
-
     if item.sell_in < 0
       adjust_quality(item, -2)
     else
