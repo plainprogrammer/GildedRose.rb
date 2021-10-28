@@ -41,14 +41,16 @@ def update(item)
 
   decrement_sell_in(item)
 
-  case item.name
+  updater = case item.name
   when 'Aged Brie'
-    UPDATERS[:aged_brie].call(item)
+    UPDATERS[:aged_brie]
   when 'Backstage passes to a TAFKAL80ETC concert'
-    UPDATERS[:backstage_pass].call(item)
+    UPDATERS[:backstage_pass]
   else # Normal Item
-    UPDATERS[:normal].call(item)
+    UPDATERS[:normal]
   end
+
+  updater.call(item)
 end
 
 def update_quality(items)
