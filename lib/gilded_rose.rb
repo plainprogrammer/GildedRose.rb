@@ -1,4 +1,17 @@
 class ItemDecorator < SimpleDelegator
+  def self.decorate(item)
+    case item.name
+    when 'Aged Brie'
+      AgedBrie.new(item)
+    when 'Backstage passes to a TAFKAL80ETC concert'
+      BackstagePass.new(item)
+    when 'Sulfuras, Hand of Ragnaros'
+      LegendaryItem.new(item)
+    else
+      ItemDecorator.new(item)
+    end
+  end
+
   def update
     decrement_quality
     decrement_sell_in
@@ -48,16 +61,7 @@ end
 
 def update_quality(items)
   items.each do |item|
-    case item.name
-    when 'Aged Brie'
-      AgedBrie.new(item).update
-    when 'Backstage passes to a TAFKAL80ETC concert'
-      BackstagePass.new(item).update
-    when 'Sulfuras, Hand of Ragnaros'
-      LegendaryItem.new(item).update
-    else
-      ItemDecorator.new(item).update
-    end
+    ItemDecorator.decorate(item).update
   end
 end
 
