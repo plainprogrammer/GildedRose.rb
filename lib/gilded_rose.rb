@@ -11,26 +11,23 @@ end
 
 def update_quality(items)
   items.each do |item|
-    if item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert'
-      if item.name != 'Sulfuras, Hand of Ragnaros'
-        adjust_quality(item, -1)
-      end
-    else
-      adjust_quality(item, 1)
-      if item.name == 'Backstage passes to a TAFKAL80ETC concert'
-        if item.sell_in < 11
-          adjust_quality(item, 1)
-        end
-        if item.sell_in < 6
-          adjust_quality(item, 1)
-        end
-      end
-    end
-
     case item.name
+    when 'Aged Brie'
+      adjust_quality(item, 1)
+      decrement_sell_in(item)
+    when 'Backstage passes to a TAFKAL80ETC concert'
+      adjust_quality(item, 1)
+      if item.sell_in < 11
+        adjust_quality(item, 1)
+      end
+      if item.sell_in < 6
+        adjust_quality(item, 1)
+      end
+      decrement_sell_in(item)
     when 'Sulfuras, Hand of Ragnaros'
       # No-Op
     else
+      adjust_quality(item, -1)
       decrement_sell_in(item)
     end
 
