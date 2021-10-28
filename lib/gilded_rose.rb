@@ -1,6 +1,8 @@
 def adjust_quality(item, amount)
   return if amount > 0 && item.quality == 50
-  item.quality += amount if item.quality > 0
+  return if amount < 0 && item.quality == 0
+
+  item.quality += amount
 end
 
 def decrement_sell_in(item)
