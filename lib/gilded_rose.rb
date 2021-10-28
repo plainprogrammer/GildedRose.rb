@@ -40,19 +40,15 @@ UPDATERS = {
   legendary: Proc.new {|_item|}
 }
 
-def update(item)
-  updater = case item.name
-  when 'Sulfuras, Hand of Ragnaros'
-    UPDATERS[:legendary]
-  when 'Aged Brie'
-    UPDATERS[:aged_brie]
-  when 'Backstage passes to a TAFKAL80ETC concert'
-    UPDATERS[:backstage_pass]
-  else # Normal Item
-    UPDATERS[:normal]
-  end
+ITEM_TYPE_MAP = {
+  'Sulfuras, Hand of Ragnaros': :legendary,
+  'Aged Brie': :aged_brie,
+  'Backstage passes to a TAFKAL80ETC concert': :backstage_pass
+}
 
-  updater.call(item)
+def update(item)
+  item_type = ITEM_TYPE_MAP[item.name.to_sym] || :normal
+  UPDATERS[item_type].call(item)
 end
 
 def update_quality(items)
