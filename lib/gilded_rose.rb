@@ -10,6 +10,7 @@ end
 
 UPDATERS = {
   normal: Proc.new { |item|
+    decrement_sell_in(item)
     if item.sell_in < 0
       adjust_quality(item, -2)
     else
@@ -17,6 +18,7 @@ UPDATERS = {
     end
   },
   backstage_pass: Proc.new { |item|
+    decrement_sell_in(item)
     if item.sell_in < 0
       adjust_quality(item, -item.quality)
     elsif item.sell_in >= 10
@@ -28,6 +30,7 @@ UPDATERS = {
     end
   },
   aged_brie: Proc.new { |item|
+    decrement_sell_in(item)
     if item.sell_in < 0
       adjust_quality(item, 2)
     else
@@ -42,13 +45,10 @@ def update(item)
   when 'Sulfuras, Hand of Ragnaros'
     UPDATERS[:legendary]
   when 'Aged Brie'
-    decrement_sell_in(item)
     UPDATERS[:aged_brie]
   when 'Backstage passes to a TAFKAL80ETC concert'
-    decrement_sell_in(item)
     UPDATERS[:backstage_pass]
   else # Normal Item
-    decrement_sell_in(item)
     UPDATERS[:normal]
   end
 
