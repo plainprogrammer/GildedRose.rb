@@ -1,4 +1,5 @@
 def adjust_quality(item, amount)
+  return if amount > 0 && item.quality == 50
   item.quality += amount if item.quality > 0
 end
 
@@ -13,19 +14,13 @@ def update_quality(items)
         adjust_quality(item, -1)
       end
     else
-      if item.quality < 50
-        adjust_quality(item, 1)
-        if item.name == 'Backstage passes to a TAFKAL80ETC concert'
-          if item.sell_in < 11
-            if item.quality < 50
-              adjust_quality(item, 1)
-            end
-          end
-          if item.sell_in < 6
-            if item.quality < 50
-              adjust_quality(item, 1)
-            end
-          end
+      adjust_quality(item, 1)
+      if item.name == 'Backstage passes to a TAFKAL80ETC concert'
+        if item.sell_in < 11
+          adjust_quality(item, 1)
+        end
+        if item.sell_in < 6
+          adjust_quality(item, 1)
         end
       end
     end
@@ -42,9 +37,7 @@ def update_quality(items)
           adjust_quality(item, -item.quality)
         end
       else
-        if item.quality < 50
-          adjust_quality(item, 1)
-        end
+        adjust_quality(item, 1)
       end
     end
   end
