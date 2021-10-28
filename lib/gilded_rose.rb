@@ -1,3 +1,5 @@
+require 'delegate'
+
 class ItemDecorator < SimpleDelegator
   def self.decorate(item)
     case item.name
