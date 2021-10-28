@@ -37,13 +37,22 @@ UPDATERS = {
       adjust_quality(item, 1)
     end
   },
-  legendary: Proc.new {|_item|}
+  legendary: Proc.new {|_item|},
+  conjured: Proc.new { |item|
+    decrement_sell_in(item)
+    if item.sell_in < 0
+      adjust_quality(item, -4)
+    else
+      adjust_quality(item, -2)
+    end
+  }
 }
 
 ITEM_TYPE_MAP = {
   'Sulfuras, Hand of Ragnaros': :legendary,
   'Aged Brie': :aged_brie,
-  'Backstage passes to a TAFKAL80ETC concert': :backstage_pass
+  'Backstage passes to a TAFKAL80ETC concert': :backstage_pass,
+  'Conjured Mana Cake': :conjured
 }
 
 def update(item)
