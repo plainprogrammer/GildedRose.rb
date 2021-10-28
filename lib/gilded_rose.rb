@@ -5,10 +5,6 @@ class ItemDecorator < SimpleDelegator
       decrement_quality
       decrement_sell_in
       decrement_quality if self.sell_in < 0
-    when 'Aged Brie'
-      increment_quality
-      decrement_sell_in
-      increment_quality if self.sell_in < 0
     when 'Backstage passes to a TAFKAL80ETC concert'
       increment_quality
       if self.sell_in < 11
@@ -43,9 +39,22 @@ class ItemDecorator < SimpleDelegator
   end
 end
 
+class AgedBrie < ItemDecorator
+  def update
+    increment_quality
+    decrement_sell_in
+    increment_quality if self.sell_in < 0
+  end
+end
+
 def update_quality(items)
   items.each do |item|
-    ItemDecorator.new(item).update
+    case item.name
+    when 'Aged Brie'
+      AgedBrie.new(item).update
+    else
+      ItemDecorator.new(item).update
+    end
   end
 end
 
