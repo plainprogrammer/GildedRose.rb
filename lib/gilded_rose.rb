@@ -26,9 +26,14 @@ def update_quality(items)
         end
       end
     end
-    if item.name != 'Sulfuras, Hand of Ragnaros'
+
+    case item.name
+    when 'Sulfuras, Hand of Ragnaros'
+      # No-Op
+    else
       decrement_sell_in(item)
     end
+
     if item.sell_in < 0
       if item.name != "Aged Brie"
         if item.name != 'Backstage passes to a TAFKAL80ETC concert'
