@@ -1,48 +1,81 @@
+require 'delegate'
+
+class ItemDecorator < SimpleDelegator
+  def self.decorate(item)
+    case item.name
+    when 'Aged Brie'
+      AgedBrie.new(item)
+    when 'Backstage passes to a TAFKAL80ETC concert'
+      BackstagePass.new(item)
+    when 'Sulfuras, Hand of Ragnaros'
+      LegendaryItem.new(item)
+    when 'Conjured Mana Cake'
+      ConjuredItem.new(item)
+    else
+      ItemDecorator.new(item)
+    end
+  end
+
+  def update
+    decrement_quality
+    decrement_sell_in
+    decrement_quality if self.sell_in < 0
+  end
+
+  private
+
+  def decrement_quality
+    self.quality -= 1 if self.quality > 0
+  end
+
+  def increment_quality
+    self.quality += 1 if self.quality < 50
+  end
+
+  def decrement_sell_in
+    self.sell_in -= 1
+  end
+
+  def zero_out_quality
+    self.quality = 0
+  end
+end
+
+class AgedBrie < ItemDecorator
+  def update
+    increment_quality
+    decrement_sell_in
+    increment_quality if self.sell_in < 0
+  end
+end
+
+class BackstagePass < ItemDecorator
+  def update
+    increment_quality
+    increment_quality if self.sell_in < 11
+    increment_quality if self.sell_in < 6
+    decrement_sell_in
+    zero_out_quality if self.sell_in < 0
+  end
+end
+
+class LegendaryItem < ItemDecorator
+  def update; end # No-Op
+end
+
+class ConjuredItem < ItemDecorator
+  def update
+    decrement_quality
+    decrement_quality
+    decrement_sell_in
+    decrement_quality if self.sell_in < 0
+    decrement_quality if self.sell_in < 0
+  end
+end
+
 def update_quality(items)
   items.each do |item|
-    if item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert'
-      if item.quality > 0
-        if item.name != 'Sulfuras, Hand of Ragnaros'
-          item.quality -= 1
-        end
-      end
-    else
-      if item.quality < 50
-        item.quality += 1
-        if item.name == 'Backstage passes to a TAFKAL80ETC concert'
-          if item.sell_in < 11
-            if item.quality < 50
-              item.quality += 1
-            end
-          end
-          if item.sell_in < 6
-            if item.quality < 50
-              item.quality += 1
-            end
-          end
-        end
-      end
-    end
-    if item.name != 'Sulfuras, Hand of Ragnaros'
-      item.sell_in -= 1
-    end
-    if item.sell_in < 0
-      if item.name != "Aged Brie"
-        if item.name != 'Backstage passes to a TAFKAL80ETC concert'
-          if item.quality > 0
-            if item.name != 'Sulfuras, Hand of Ragnaros'
-              item.quality -= 1
-            end
-          end
-        else
-          item.quality = item.quality - item.quality
-        end
-      else
-        if item.quality < 50
-          item.quality += 1
-        end
-      end
-    end
+    ItemDecorator.decorate(item).update
   end
 end
 
