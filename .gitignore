@@ -1,2 +1,6 @@
 coverage
 Gemfile.lock
+.bundle/
+bin/htmldiff
+bin/ldiff
+bin/rspec
