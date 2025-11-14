@@ -1,3 +1,24 @@
+# Item type predicates (pure functions)
+def aged_brie?(item)
+  item.name == 'Aged Brie'
+end
+
+def sulfuras?(item)
+  item.name == 'Sulfuras, Hand of Ragnaros'
+end
+
+def backstage_pass?(item)
+  item.name == 'Backstage passes to a TAFKAL80ETC concert'
+end
+
+def conjured?(item)
+  item.name.start_with?('Conjured')
+end
+
+def normal_item?(item)
+  !aged_brie?(item) && !sulfuras?(item) && !backstage_pass?(item) && !conjured?(item)
+end
+
 def update_quality(items)
   items.each do |item|
     if item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert'
