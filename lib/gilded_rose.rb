@@ -28,6 +28,27 @@ def update_aged_brie(item)
   item.quality = [item.quality + increase, 50].min
 end
 
+def update_backstage_pass(item)
+  # Quality increases as sell_in approaches
+  # +1 normally, +2 when 10 days or less, +3 when 5 days or less
+  # Drops to 0 after the concert
+  if item.quality < 50
+    item.quality += 1
+    if item.sell_in < 11 && item.quality < 50
+      item.quality += 1
+    end
+    if item.sell_in < 6 && item.quality < 50
+      item.quality += 1
+    end
+  end
+
+  item.sell_in -= 1
+
+  if item.sell_in < 0
+    item.quality = 0
+  end
+end
+
 def update_quality(items)
   items.each do |item|
     # Handle Sulfuras separately (no changes needed)
@@ -44,19 +65,7 @@ def update_quality(items)
 
     # Handle Backstage passes
     if backstage_pass?(item)
-      if item.quality < 50
-        item.quality += 1
-        if item.sell_in < 11 && item.quality < 50
-          item.quality += 1
-        end
-        if item.sell_in < 6 && item.quality < 50
-          item.quality += 1
-        end
-      end
-      item.sell_in -= 1
-      if item.sell_in < 0
-        item.quality = 0
-      end
+      update_backstage_pass(item)
       next
     end
 
