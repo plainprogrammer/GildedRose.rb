@@ -49,6 +49,13 @@ def update_backstage_pass(item)
   end
 end
 
+def update_normal_item(item)
+  # Normal items degrade by 1 per day, 2 per day after sell date
+  decrease = item.sell_in > 0 ? 1 : 2
+  item.quality = [item.quality - decrease, 0].max
+  item.sell_in -= 1
+end
+
 def update_quality(items)
   items.each do |item|
     # Handle Sulfuras separately (no changes needed)
@@ -69,14 +76,8 @@ def update_quality(items)
       next
     end
 
-    # Handle normal items (including conjured, for now)
-    if item.quality > 0
-      item.quality -= 1
-    end
-    item.sell_in -= 1
-    if item.sell_in < 0 && item.quality > 0
-      item.quality -= 1
-    end
+    # Handle normal items (default case, including conjured for now)
+    update_normal_item(item)
   end
 end
 
