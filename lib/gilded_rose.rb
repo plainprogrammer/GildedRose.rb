@@ -60,6 +60,29 @@ def calculate_sell_in(item)
   sulfuras?(item) ? item.sell_in : item.sell_in - 1
 end
 
+# Item update strategy (functional dispatch)
+def calculate_new_quality(item)
+  quality_calculator = case
+  when sulfuras?(item) then method(:calculate_sulfuras_quality)
+  when aged_brie?(item) then method(:calculate_aged_brie_quality)
+  when backstage_pass?(item) then method(:calculate_backstage_pass_quality)
+  when conjured?(item) then method(:calculate_conjured_quality)
+  when normal_item?(item) then method(:calculate_normal_quality)
+  else method(:calculate_normal_quality)
+  end
+
+  quality_calculator.call(item.quality, item.sell_in)
+end
+
+def update_item(item)
+  new_quality = calculate_new_quality(item)
+  new_sell_in = calculate_sell_in(item)
+
+  item.quality = new_quality
+  item.sell_in = new_sell_in
+  item
+end
+
 def update_quality(items)
   items.each do |item|
     if item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert'
