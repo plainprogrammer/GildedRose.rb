@@ -56,6 +56,14 @@ def update_normal_item(item)
   item.sell_in -= 1
 end
 
+def update_conjured_item(item)
+  # Conjured items degrade twice as fast as normal items
+  # 2 per day before sell date, 4 per day after sell date
+  decrease = item.sell_in > 0 ? 2 : 4
+  item.quality = [item.quality - decrease, 0].max
+  item.sell_in -= 1
+end
+
 def update_quality(items)
   items.each do |item|
     # Handle Sulfuras separately (no changes needed)
@@ -76,7 +84,13 @@ def update_quality(items)
       next
     end
 
-    # Handle normal items (default case, including conjured for now)
+    # Handle Conjured items
+    if conjured?(item)
+      update_conjured_item(item)
+      next
+    end
+
+    # Handle normal items (default case)
     update_normal_item(item)
   end
 end
