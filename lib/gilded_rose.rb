@@ -55,6 +55,11 @@ def calculate_conjured_quality(quality, sell_in)
   clamp_quality(quality - degradation)
 end
 
+# Sell-in calculation (pure function)
+def calculate_sell_in(item)
+  sulfuras?(item) ? item.sell_in : item.sell_in - 1
+end
+
 def update_quality(items)
   items.each do |item|
     if item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert'
