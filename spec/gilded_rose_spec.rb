@@ -191,12 +191,12 @@ RSpec.describe 'update_quality' do
       context 'before the sell date' do
         let(:initial_sell_in) { 5 }
 
-        xit { expect(item.quality).to eq(initial_quality - 2) }
+        it { expect(item.quality).to eq(initial_quality - 2) }
 
         context 'at zero quality' do
           let(:initial_quality) { 0 }
 
-          xit { expect(item.quality).to eq(initial_quality) }
+          it { expect(item.quality).to eq(initial_quality) }
         end
       end
 
