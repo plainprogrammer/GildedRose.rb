@@ -1,3 +1,20 @@
+# Helper methods to identify item types
+def aged_brie?(item)
+  item.name == 'Aged Brie'
+end
+
+def sulfuras?(item)
+  item.name == 'Sulfuras, Hand of Ragnaros'
+end
+
+def backstage_pass?(item)
+  item.name == 'Backstage passes to a TAFKAL80ETC concert'
+end
+
+def conjured?(item)
+  item.name.start_with?('Conjured')
+end
+
 def update_quality(items)
   items.each do |item|
     if item.name != 'Aged Brie' && item.name != 'Backstage passes to a TAFKAL80ETC concert'
